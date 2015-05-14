@@ -1,0 +1,161 @@
+Rewriting Parse.com
+15 May 2015
+RootConf, Bangalore
+
+* Who is this Guy?
+Abhishek Kona
+Software Engineer at Parse.com, Facebook
+Ex-Flipkart
+@sheki
+
+* What is the talk about?
+- What are the (scaling) problems we had at Parse.com ?
+- How we solved them?
+- Did we learn anything?
+
+* What is Parse.com?
+.image images/parse.jpg
+- Developer platform to build mobile apps.
+- Backend-As-A-Service, build an app not backend.
+- Works for IOS, Android, JS, React, React-Native, Windows, PHP ...
+- Acquired by Facebook in 2013.
+
+* Parse - Circa 2013.
+- ~60K apps.
+- 10 Engineers.
+- Ruby on Rails App (like every company out of YCombinator)
+.image images/rails.png 230 200
+
+* Parse - Right now.
+- 500K apps built on Parse.
+- 100% Year-On-Year traffic growth.
+- Primarily a Go Stack.
+.image images/gopherbw.png 230 200
+
+* Parse.com - Issues (2013)
+- Uptime ~90%
+- Single popular app can take down Parse.com
+- Unmanageable codebase
+
+* Listing down our Problems - "Beast List"
+- Create a Checklist of all issues preventing us having an uptime of 99.9+%
+- Came up with software / tools we can build. 
+
+Some concrete issues
+
+- Unicorn, our Ruby HTTP server was a resource hog.
+- Large deploy times.
+
+* We decided to Rewrite in Go.
+.image images/rewrite.png 500 400
+
+* Why Rewrite?
+- Could not understand the Ruby codebase.
+- Estimated performance win - huge.
+- New codebase will be statically typed.
+
+* Why Go?
+- Statically typed programming language with good concurrency support.
+- Outperforms Ruby - build and execution time.
+- Our second choice was C#, 
+
+* Status of the Rewrite
+- Took 3-4 Engineers 1.5 years to complete. It works.
+.image images/rewrite_graph.png 500 800
+
+* How did the rewrite help?
+- Got rid of Unicorn.
+- We can add capacity quickly, deploy speeds went up.
+- Readable codebase (for now).
+
+* What did we learn?
+- No silver bullet.
+- Mostly about managing the pain.
+
+* Monoliths are all right.
+.image images/monolith.jpg 500 350
+
+* Monoliths
+- Micro-Services are all a rage, but it is quicker to build/test a single binary.
+- We built Parse.com mostly as a monolith, inspired by Facebook.com
+- Micro-services work if there are multiple teams managing different services.
+
+* Proxies - you probably need them.
+- Connections consume precious memory on the DB.
+- Proxies help effectively manage connections across app servers. 
+- Side-effect - you can monitor your database perf from a central place.
+- We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
+
+* Metrics
+- When in doubt measure everything.
+- We started with Ganglia -> UI froze after 100 metrics.
+- We use Facebooks Scuba and ODS. 
+- Find a metrics service, hopefully you don't have to write one.
+[[https://www.facebook.com/notes/facebook-engineering/under-the-hood-data-diving-with-scuba/10150599692628920]]
+
+* Shadow Live Traffic
+- Real bugs show under live traffic.
+- We had a mechanism to run live traffic on a test cluster.
+- Tools to compare results from test and prod cluster invaluable.
+- Shadowed traffic for months for some endpoints before we released to 100% of users.
+- Our setup -> a custom Go HTTP proxy to send requests to test and prod clusters.
+- Works great for Read APIs.
+- Complicated setup for Write APIs with database snapshot and DB compare. 
+
+* Throttles
+- First line of defense - capability to block any backend, client.
+- Our throttling was Simple Memcache based counters.
+- Currently evolving into Auto-throttling.
+
+* Gatekeeper / Decider
+- Feature flags / production hooks to control roll out of new code to a fraction of users/traffic.
+- Good way to get confidence.
+- Our in house Go system is called Decider -> based of Redis.
+- Important to clean up old code after the roll out to avoid code smells.
+
+* Deploys
+- Our philosophy - every engineer should deploy when needed.
+- We moved away from a fixed Monday release to release all the time.
+- Deploy many small changes as often as possible.
+- Deployctl - In house tool written in Python to deploy Go (Zookeeper based).
+- Deploy locking and canarying.
+
+* Cockpit
+- Admin HTTP service on every binary for debugging.
+- Exposes Health Checks / Git version / build time / uptime.
+- Can connect pprof over it (thanks GoLang).
+- Can activate verbose logging on a particular server - logs every request response pair.
+
+* Context
+- Pass global context object through out our codebase.
+- Context can be used to tag along ReqID, AppID 
+- We use context to pass in a ReqID, that is added to query comment on Mongo, helps us track back a request from a slow query in the log.
+- Support context objects when writing a new library.
+- Golang has great context package [[golang.org/x/net]].
+
+* Own your Database
+- Sooner or later DB will be the bottleneck.
+- Understand the internals of your Database from the begging. 
+- Query planner, db caches - row/block cache, Indexing trade-offs, major locks.
+- Start hacking on the DB codebase, you can add custom metrics - usually easier than it seems.
+- Parse.com+RocksDB team at Facebook built a new storage engine for Mongo - Mongo-Rocks.
+[[http://blog.parse.com/announcements/mongodb-rocksdb-parse/]]
+
+* About our Codebase
+- Dependency Injection - only at boot time [[https://github.com/facebookgo/inject]].
+- Lots of small libraries [[https://github.com/facebookgo/]].
+- Try not to fork - we submit patches upstream.
+
+* Tests
+- Integration tests > unit tests.
+- Our go test suite takes less than 2min to run.
+- Parallel test runs are beautiful.
+- We boot multiple mongo/memcache instances in memory in our test binary.
+[[http://github.com/facebookgo/mgotest]]
+[[https://github.com/facebookgo/mctest]]
+
+* Closing Thoughts
+- Rewrite is not the worst idea.
+- GO is great.
+- User Parse.com for your next app.
+
