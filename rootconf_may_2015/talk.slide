@@ -67,6 +67,8 @@ Some concrete issues
 - Got rid of Unicorn.
 - We can add capacity quickly, deploy speeds went up.
 - Readable codebase (for now).
+.image images/unicorn.png 200 200
+
 
 * What did we learn?
 - No silver bullet.
