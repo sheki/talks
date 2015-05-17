@@ -137,7 +137,7 @@ Some concrete issues
 
 * Own your Database
 - Sooner or later DB will be the bottleneck.
-- Understand the internals of your Database from the begging. 
+- Understand the internals of your Database from the start. 
 - Query planner, db caches - row/block cache, Indexing trade-offs, major locks.
 - Start hacking on the DB codebase, you can add custom metrics - usually easier than it seems.
 - Parse.com+RocksDB team at Facebook built a new storage engine for Mongo - Mongo-Rocks.
