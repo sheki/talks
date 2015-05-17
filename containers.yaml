@@ -1,0 +1,8 @@
+version: v1beta3
+containers:
+  - name: talks
+    image: sheki/talks 
+    ports:
+      - name: http-port
+        containerPort: 8080
+        hostPort: 80
