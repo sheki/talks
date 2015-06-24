@@ -1,0 +1,80 @@
+Rewriting Parse.com in Go
+8 July 2015
+
+* Who is this Guy?
+Abhishek Kona
+Software Engineer at Parse.com, Facebook.
+@sheki
+
+* What is this talk about?
+- How did we rewrite Parse.com from Ruby to Go.
+- Tools and libraries we built.
+- Our opinions.
+
+* What is Parse.com?
+.image images/parse.jpg
+- Developer platform to build mobile apps.
+- Backend-As-A-Service, build an app not backend.
+- Works for IOS, Android, JS, React, React-Native, Windows, PHP ...
+- Acquired by Facebook in 2013.
+
+* Parse - before Go. 
+- Circa 2013.
+- ~60K apps.
+- 10 Engineers.
+- Ruby on Rails App (like every company out of YCombinator)
+.image images/rails.png 230 200
+
+* Parse - after Go.
+- 500K apps built on Parse.
+- 100% Year-On-Year traffic growth.
+- Primarily a Go Stack.
+.image images/gopherbw.png 230 200
+
+* Why did we pick Go? 
+- Statically typed programming language 
+- Good concurrency support.
+- Outperforms Ruby - build and execution time.
+- Our second choice was C#, 
+
+* Status of the Rewrite
+- Took 3-4 Engineers 1.5 years to complete. It works.
+.image images/rewrite_graph.png 500 800
+
+* Philosophy
+
+
+* Libraries / Tools
+
+* Dependency Injection
+.link http://github.com/facebookgo/inject
+
+* Inject Features
+- Dependency injection only at Boot-time.
+- No runtime changes.
+- Explicit tags.
+- Fail instead of guessing.
+
+* Dependency Injection Code
+.code code/inject_example.go
+
+* Main for Inject
+.code code/inject_main.go
+
+* Ship
+An internal library
+- Initialize concrete injected types.
+- Call `Start` / `Stop` automatically.
+- Starts types in a bottom up fashion of the object Graph.
+- Fails on cycles.
+
+* Ship Code.
+.code code/ship_code.go
+
+* Test Harness
+* Testing Libraries (mgotest)
+* Error Reporting / stackerr / stacks
+* Other Cool Libraries => stats/ freeport 
+* Monolith first approach
+* Why Go now?
+* Recap
