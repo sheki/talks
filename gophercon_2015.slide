@@ -26,7 +26,7 @@ Software Engineer at Parse.com, Facebook.
 .image images/rails.png 230 200
 
 * Parse - after Go.
-- 500K apps built on Parse.
+- 500K apps.
 - 100% Year-On-Year traffic growth.
 - Primarily a Go Stack.
 .image images/gopherbw.png 230 200
@@ -41,8 +41,17 @@ Software Engineer at Parse.com, Facebook.
 - Took 3-4 Engineers 1.5 years to complete. It works.
 .image images/rewrite_graph.png 500 800
 
-* Philosophy
+* Go the Good parts.
+- Easy to learn.
+- Performance - almost always works.
+- Concurrent - no process per request model, can do things in the background.
+- No format wars
+- Everything a modern language should have.
 
+* Our Rewrite. 
+- Parse.com is an API.
+- Some background jobs.
+- Most of are libraries are handcrafted in-house and artisnal.
 
 * Libraries / Tools
 
@@ -74,6 +83,9 @@ An internal library
 * Test Harness
 * Testing Libraries (mgotest)
 * Error Reporting / stackerr / stacks
+* Go-Resque
+* Pq-Expr
+* Shovel
 * Other Cool Libraries => stats/ freeport 
 * Monolith first approach
 * Why Go now?
