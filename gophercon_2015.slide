@@ -1,9 +1,12 @@
-Rewriting Parse.com in Go
-8 July 2015
+Rewriting Parse.com in Go.
+GopherCon 2015, Denver
+8 Jul 2015
+Tags: foo, bar, baz
 
-* Who is this Guy?
 Abhishek Kona
 Software Engineer at Parse.com, Facebook.
+abhishek.kona@gmail.com
+http://sheki.in
 @sheki
 
 * What is this talk about?
@@ -52,6 +55,7 @@ Software Engineer at Parse.com, Facebook.
 - Parse.com is an API.
 - Some background jobs.
 - Most of are libraries are handcrafted in-house and artisnal.
+- Need more theme leading into libraries
 
 * Libraries / Tools
 
@@ -77,16 +81,47 @@ An internal library
 - Starts types in a bottom up fashion of the object Graph.
 - Fails on cycles.
 
-* Ship Code.
+* Ship code.
 .code code/ship_code.go
 
 * Test Harness
-* Testing Libraries (mgotest)
-* Error Reporting / stackerr / stacks
+- Ship allows us to bootstrap dependencies for tests.
+- TODO
+* Test Harness code.
+.code code/harness_test.go
+
+* Testing Libraries 
+- We run fresh instances of mongo and memcache for tests.
+- (Almost) No mocking.
+- Libraries for running lightweight instances of our backends.
+.link github.com/facebookgo/mctest
+.link github.com/facebookgo/mgotest
+
+* Error Reporting / stackerr
+.link https://github.com/facebookgo/stackerr
+- Wrap every error with stack wrap calls.
+- Aggregate errors based on stack trace in an in house system called log-view.
+
+* Stackerr code sample
+.code code/stackerr.go
+
+* Stackerr Output
+.code code/stackerr_out.go
+
 * Go-Resque
-* Pq-Expr
+- In House clone of the Ruby Redis-Resque.
+- Used by our push stack to send pushes in the background.
+
 * Shovel
-* Other Cool Libraries => stats/ freeport 
+- A lightweight UDP server for async operations. 
+- Used by our Ruby servers.
+
 * Monolith first approach
-* Why Go now?
+
+* Some stats.
+- ~500k Go LOC vs ~130k Ruby Codebase
+- ~2800 types 
+- Parallel Unit test
+- ~3m to run all the unit tests.
+
 * Recap
