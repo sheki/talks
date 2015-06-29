@@ -34,11 +34,24 @@ http://sheki.in
 - Primarily a Go Stack.
 .image images/gopherbw.png 230 200
 
-* Why did we pick Go? 
-- Statically typed programming language 
-- Good concurrency support.
+* Parse.com - Issues (2013)
+- Uptime ~90%
+- Single popular app can take down Parse.com
+- Unmanageable codebase
+
+* We decided to Rewrite in Go.
+.image images/rewrite.png 500 400
+
+* Why Rewrite?
+- Could not understand the Ruby codebase.
+- Estimated performance win - huge.
+- New codebase will be statically typed.
+
+* Why Go?
+- Statically typed programming language with good concurrency support.
 - Outperforms Ruby - build and execution time.
 - Our second choice was C#, 
+
 
 * Status of the Rewrite
 - Took 3-4 Engineers 1.5 years to complete. It works.
@@ -52,10 +65,7 @@ http://sheki.in
 - Everything a modern language should have.
 
 * Our Rewrite. 
-- Parse.com is an API.
-- Some background jobs.
-- Most of are libraries are handcrafted in-house and artisnal.
-- Need more theme leading into libraries
+- #NEED A THEME LEADING TO LIBRARIES
 
 * Libraries / Tools
 
@@ -114,14 +124,23 @@ An internal library
 
 * Shovel
 - A lightweight UDP server for async operations. 
-- Used by our Ruby servers.
+- Used by our Ruby and CPP services to do background operations .e.g. metrics
 
-* Monolith first approach
+* Monoliths
+- Micro-Services are all a rage, but it is quicker to build/test a single binary.
+- We built Parse.com mostly as a monolith, inspired by Facebook.com
+- Micro-services work if there are multiple teams managing different services.
+
+* Proxy - you probably need one.
+- Connections consume precious memory on the DB.
+- Proxies help effectively manage connections across app servers. 
+- Side-effect - you can monitor your database perf from a central place.
+- We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
 
 * Some stats.
 - ~500k Go LOC vs ~130k Ruby Codebase
 - ~2800 types 
 - Parallel Unit test
-- ~3m to run all the unit tests.
+- ~3minutes to run all the unit tests.
 
 * Recap
