@@ -1,24 +1,21 @@
-Rewriting Parse.com in Go.
+Rewriting Parse.com in Go
 GopherCon 2015, Denver
 8 Jul 2015
-Tags: foo, bar, baz
 
 Abhishek Kona
 Software Engineer at Parse.com, Facebook.
-abhishek.kona@gmail.com
+abhishekk@fb.com
 http://sheki.in
 @sheki
 
 * What is this talk about?
-- How did we rewrite Parse.com from Ruby to Go.
+- Why and how did we rewrite api.arse.com from Ruby to Go.
 - Tools and libraries we built.
-- Our opinions.
 
 * What is Parse.com?
 .image images/parse.jpg
-- Developer platform to build mobile apps.
 - Backend-As-A-Service, build an app not backend.
-- Works for IOS, Android, JS, React, React-Native, Windows, PHP ...
+- Works for IoS, Android, JS, React, Windows, PHP ...
 - Acquired by Facebook in 2013.
 
 * Parse - before Go. 
@@ -28,53 +25,55 @@ http://sheki.in
 - Ruby on Rails App (like every company out of YCombinator)
 .image images/rails.png 230 200
 
-* Parse - after Go.
-- 500K apps.
-- 100% Year-On-Year traffic growth.
-- Primarily a Go Stack.
-.image images/gopherbw.png 230 200
 
 * Parse.com - Issues (2013)
-- Uptime ~90%
-- Single popular app can take down Parse.com
+- Single popular app could take down Parse.com
+- Fixed unicorn pool.
+- High deploy times.
 - Unmanageable codebase
 
 * We decided to Rewrite in Go.
 .image images/rewrite.png 500 400
 
 * Why Rewrite?
-- Could not understand the Ruby codebase.
 - Estimated performance win - huge.
-- New codebase will be statically typed.
+- Could not understand the Ruby codebase.
+- Would have liked something static.
 
 * Why Go?
-- Statically typed programming language with good concurrency support.
-- Outperforms Ruby - build and execution time.
-- Our second choice was C#, 
+- Statically typed.
+- Good concurrency support.
+- Easier to hire engineers.
 
+* Rules of the rewrite.
+- Don't break backward compaitibility.
+- No downtime.
 
-* Status of the Rewrite
-- Took 3-4 Engineers 1.5 years to complete. It works.
-.image images/rewrite_graph.png 500 800
+* Progress of the Rewrite
+- We started with a new service - parse-hosting.
+- Next up get rid of PPNS. (Parse push notification service).
+- PPNS went from 250k conns to 1.5m conns per node.
 
-* Go the Good parts.
-- Easy to learn.
-- Performance - almost always works.
-- Concurrent - no process per request model, can do things in the background.
-- No format wars
-- Everything a modern language should have.
+* Rewrite progress contd.
+- Migrate end points one by one.
+- Picked low traffic read only endpoints.
+- Graduate to write endpoints.
+- Shadow live traffic.
 
-* Our Rewrite. 
-- #NEED A THEME LEADING TO LIBRARIES
-
+* Go a young language.
+- Go was a relatively young language - no best practices.
+- Few good libraries -> mgo, memcache 
+- Missing libraries
+  
 * Libraries / Tools
 
 * Dependency Injection
-.link http://github.com/facebookgo/inject
+- Replacing implementations in test and production.
+- Easy to miss passing a dependency to a component.
 
-* Inject Features
+* Introducing Inject
+.link http://github.com/facebookgo/inject
 - Dependency injection only at Boot-time.
-- No runtime changes.
 - Explicit tags.
 - Fail instead of guessing.
 
@@ -84,28 +83,15 @@ http://sheki.in
 * Main for Inject
 .code code/inject_main.go
 
-* Ship
-An internal library
+* Start-stop 
+.link http://github.com/facebookgo/startstop
 - Initialize concrete injected types.
 - Call `Start` / `Stop` automatically.
-- Starts types in a bottom up fashion of the object Graph.
+- Starts types in a bottom up fashion.
 - Fails on cycles.
 
-* Ship code.
+* Start-stop code.
 .code code/ship_code.go
-
-* Test Harness
-- Ship allows us to bootstrap dependencies for tests.
-- TODO
-* Test Harness code.
-.code code/harness_test.go
-
-* Testing Libraries 
-- We run fresh instances of mongo and memcache for tests.
-- (Almost) No mocking.
-- Libraries for running lightweight instances of our backends.
-.link github.com/facebookgo/mctest
-.link github.com/facebookgo/mgotest
 
 * Error Reporting / stackerr
 .link https://github.com/facebookgo/stackerr
@@ -117,19 +103,6 @@ An internal library
 
 * Stackerr Output
 .code code/stackerr_out.go
-
-* Go-Resque
-- In House clone of the Ruby Redis-Resque.
-- Used by our push stack to send pushes in the background.
-
-* Shovel
-- A lightweight UDP server for async operations. 
-- Used by our Ruby and CPP services to do background operations .e.g. metrics
-
-* Monoliths
-- Micro-Services are all a rage, but it is quicker to build/test a single binary.
-- We built Parse.com mostly as a monolith, inspired by Facebook.com
-- Micro-services work if there are multiple teams managing different services.
 
 * Proxy - you probably need one.
 - Connections consume precious memory on the DB.
