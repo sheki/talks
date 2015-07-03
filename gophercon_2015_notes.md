@@ -34,7 +34,7 @@ We lost a few engineers who built the initial ruby stack.
 #Progress of the rewrite
 * we started with a new service parse hosting. Its a new service, needed to things which ruby was not particularly good with -> quick restarts.
 * this was a great success we built a reliable service in quick time.
-* we next went after our PPNS ervice. This is a service which opens a lot of network connections to push providers like Apple and Google. Our event-machine based ruby service was breaking at the seams. We rewrote this in go and very happy with the reliability and uptime.
+* we next went after our PPNS service. This is a service which opens a lot of network connections to push providers like Apple and Google. Our event-machine based ruby service was breaking at the seams. We rewrote this in go and very happy with the reliability and uptime.
 * This convinced us that our biggest beast the API server should be in go and we earnestly started rewriting our stack.
 
 #rewrite contd.
@@ -68,3 +68,5 @@ We lost a few engineers who built the initial ruby stack.
 #error-reporting
 - next problem we ran into was tracking errors and the components causing them
 - we started adding stack traces to all our errors. and aggregated them in an in house called log view. This is great for us to track errors.
+
+#proxy.
