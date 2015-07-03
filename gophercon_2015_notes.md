@@ -65,6 +65,9 @@ We lost a few engineers who built the initial ruby stack.
 
 - we built a library to do this. its called start-stop
 
+#graceful restarts
+- We had issues restarting our servers during deploys. We started with dropping a few user requests during deploys. We wanted to do better than this. Getting a load balancer involved would slow things down, so we built a library called grace. Grace restarts binaries and hands off the socket from the old process to the new process and waits for the old process to finish servicing its current requests before shut down.
+
 #error-reporting
 - next problem we ran into was tracking errors and the components causing them
 - we started adding stack traces to all our errors. and aggregated them in an in house called log view. This is great for us to track errors.

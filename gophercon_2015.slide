@@ -93,6 +93,11 @@ http://sheki.in
 * Start-stop code.
 .code code/ship_code.go
 
+* Graceful restarts
+.link https://github.com/facebookgo/grace
+- Restart servers gracefully on deploys.
+- Hand off the socket from the old process to the new process.
+
 * Error Reporting / stackerr
 .link https://github.com/facebookgo/stackerr
 - Wrap every error with stack wrap calls.
@@ -104,7 +109,7 @@ http://sheki.in
 * Stackerr Output
 .code code/stackerr_out.go
 
-* Proxy - you probably need one.
+* Mongo-Proxy
 - Connections consume precious memory on the DB.
 - Proxies help effectively manage connections across app servers. 
 - Side-effect - you can monitor your database perf from a central place.
@@ -112,9 +117,8 @@ http://sheki.in
 
 * Some stats.
 - ~500k Go LOC vs ~130k Ruby Codebase
-- ~2800 types 
 - Parallel Unit test
-- ~3minutes to run all the unit tests.
+- ~3 minutes to run all the unit tests.
 
 * Recap
 .image images/unicorn_burning.png
