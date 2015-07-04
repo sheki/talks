@@ -23,7 +23,7 @@ We lost a few engineers who built the initial ruby stack.
 - Statically typed.
 - Good concurrency support
 - Easier to hire programmers then c++
-- We tried running stuff on Java and we had trouble as most of our jems were not thread safe.
+- We tried running stuff on Java and we had trouble as most of our gems were not thread safe.
 - We liked C# but it was not open.
 
 #Rules of the rewrite

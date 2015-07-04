@@ -9,7 +9,7 @@ http://sheki.in
 @sheki
 
 * What is this talk about?
-- Why and how did we rewrite api.arse.com from Ruby to Go.
+- Why and how did we rewrite api.parse.com from Ruby to Go.
 - Tools and libraries we built.
 
 * What is Parse.com?
@@ -61,8 +61,8 @@ http://sheki.in
 - Shadow live traffic.
 
 * Go a young language.
-- Go was a relatively young language - no best practices.
-- Few good libraries -> mgo, memcache 
+- Go was a relatively young language.
+- Few good libraries -> mgo, memcache. 
 - Missing libraries
   
 * Libraries / Tools
@@ -119,6 +119,12 @@ http://sheki.in
 - ~500k Go LOC vs ~130k Ruby Codebase
 - Parallel Unit test
 - ~3 minutes to run all the unit tests.
+
+* Parse.com after Go
+- 500K apps built on Parse.
+- 100% Year-On-Year traffic growth.
+- Primarily a Go Stack.
+.image images/gopherbw.png 230 200
 
 * Recap
 .image images/unicorn_burning.png
