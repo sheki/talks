@@ -54,11 +54,15 @@ http://sheki.in
 - Next up get rid of PPNS. (Parse push notification service).
 - PPNS went from 250k conns to 1.5m conns per node.
 
+
 * Rewrite progress contd.
 - Migrate end points one by one.
 - Picked low traffic read only endpoints.
 - Graduate to write endpoints.
 - Shadow live traffic.
+
+* Comment Goldmine
+.code code/ruby_comments.go
 
 * Go a young language.
 - Go was a relatively young language.

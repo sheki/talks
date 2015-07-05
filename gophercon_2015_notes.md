@@ -19,7 +19,7 @@ How did Parse look before adopting Go. In 2013, parse was a Ruby on Rails app, i
 #parse issues
 Our biggest issue at Parse was one big app could impact our performance. This was because we used Unicorn - a process based ruby HTTP server.
 
-Unicorn had a fixed number of workers on each api server. Under traffic spikes we would quickly run out of workers. This would cause outages.
+Unicorn had a fixed number of workers on each api server. Under traffic spikes we would quickly run out of workers. It would happen too quickly for Auto Scaling groups to react.
 
 Our ruby deploy process was slow - it took around 25 minutes to deploy. This meant changes or urgent fixes could still not be deployed quickly.
 
@@ -32,6 +32,7 @@ So against popular wisdom - We decided to rewrite.
 * It was hard to understand the ruby codebase, we had unfortunately used a lot of gems, it was heard to understand what was going on.
 We lost a few engineers who built the initial ruby stack.
 * Reading a dynamic language is hard.
+* Our stack did not look well suited for a 10x growth.
 * Our bursty nature of traffic was not very well suited for ruby/unicorn.
 
 #Why Go?
@@ -43,7 +44,8 @@ We lost a few engineers who built the initial ruby stack.
 
 #Rules of the rewrite
 - Being a developer platform we did not want to break any backward compatibility.
-- we wanted to do it live.
+- we wanted to do it live. Mind you doing it live was not easy. We were growing the number of customers at
+a rapid pace. We were increasing the number of backends we were adding to our stack. So we were chasing a moving target.
 - my manager called it changing the engine of a running car.
 
 #Progress of the rewrite
@@ -62,6 +64,9 @@ So we decided to give Go a try.
 * we found out that a lot of unexpected behaviour supported by our ruby stack and we had to go implement it as our customers relied on it.
 * One example of this is how ruby would represent arrays in HTTP parameters.
 * this process went on and we started making progress.
+
+# Some Comments in our Ruby Codebase.
+.code code/ruby_comments.go
 
 #go a young language.
 - go was relatively young language
