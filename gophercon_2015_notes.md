@@ -2,11 +2,11 @@
 
 #what is this talk about.
 
-#what is parse.com?
+#what is parse?
 - backend as a service.
 - we have Parse Core, Parse Push and Parse Analytics along with crash reporting, configuration managment etc.
 
-#parse.com issues
+#parse issues
 - Parse had several problems affecting our uptime.
 - Unicorn our ruby webserver worked with a limited number of workers. When our traffic spiked we would very quickly run out of unicorns. Each host could only handle limited number of requests.- Our deploy times were high. It would take us 25min to deploy, we could not manually respond to traffic spikes.
 - The ruby codebase was unmanageable, hard to write unit tests against and full of optional parameters.

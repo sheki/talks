@@ -12,7 +12,7 @@ http://sheki.in
 - Why and how did we rewrite api.parse.com from Ruby to Go.
 - Tools and libraries we built.
 
-* What is Parse.com?
+* What is Parse?
 .image images/parse.jpg
 - Backend-As-A-Service, build an app not backend.
 - Works for IoS, Android, JS, React, Windows, PHP ...
@@ -26,8 +26,8 @@ http://sheki.in
 .image images/rails.png 230 200
 
 
-* Parse.com - Issues (2013)
-- Single popular app could take down Parse.com
+* Parse - Issues (2013)
+- Single popular app could take down Parse.
 - Fixed unicorn pool.
 - High deploy times.
 - Unmanageable codebase
@@ -120,7 +120,7 @@ http://sheki.in
 - Parallel Unit test
 - ~3 minutes to run all the unit tests.
 
-* Parse.com after Go
+* Parse after Go
 - 500K apps built on Parse.
 - 100% Year-On-Year traffic growth.
 - Primarily a Go Stack.
