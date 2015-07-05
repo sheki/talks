@@ -118,16 +118,21 @@ http://sheki.in
 - Side-effect - you can monitor your database perf from a central place.
 - We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
 
-* Some stats.
+* Results
 - ~500k Go LOC vs ~130k Ruby Codebase
-- Parallel Unit test
-- ~3 minutes to run all the unit tests.
+- ~3 minutes to run all the unit tests (down from 25min)
+- Easier to scale horizontally and quickly add api-servers.
+- Our ops team stopped getting massively burned out from getting paged. 
+- Downsize our API server pool by 90%
+- Rolling restarts dropped from 30 minutes to 3 minutes.
 
 * Parse after Go
 - 500K apps built on Parse.
 - 100% Year-On-Year traffic growth.
 - Primarily a Go Stack.
 .image images/gopherbw.png 230 200
+
+* We are Very happy with GO.
 
 * Recap
 .image images/unicorn_burning.png
