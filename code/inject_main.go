@@ -1,14 +1,18 @@
-func main() {
+package main
 
-	flag.Parse()
-	mgoSession, _ := mgo.Dial(*mgoAddrFlag)
+import (
+	"fmt"
+	"os"
+
+	"github.com/facebookgo/inject"
+)
+
+func main() {
 
 	var g inject.Graph
 	err := g.Provide(
 		&inject.Object{Value: scribe.NewHTTPScribeClient()},
-		&inject.Object{Value: mgoSession},
 		&inject.Object{Value: parse.NewLogger()},
-		&inject.Object{Value: parse.EnvFromFlag(*envFlag)},
 	)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

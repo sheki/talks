@@ -85,7 +85,6 @@ http://sheki.in
 
 * Start-stop 
 .link http://github.com/facebookgo/startstop
-- Initialize concrete injected types.
 - Call `Start` / `Stop` automatically.
 - Starts types in a bottom up fashion.
 - Fails on cycles.

@@ -64,12 +64,12 @@ So we decided to give Go a try.
 * this process went on and we started making progress.
 
 #go a young language.
-- go was relatively young language - no best practices we had to build our own :)
+- go was relatively young language
 - we had to build lots of libraries. it was not the gem world where we almost had a gem for everything.
 - we had to write/maintain our own version of the cassandra library after it stopped being maintained.
 - go did not have a good story around Stopping an HTTP server till 1.3.
 - we had to build all of these.
-- so we built a lot of libraries and tools.
+- in the next section I will talk about the libraries and tools we had to build in go.
 
 #dependency injection problems
 - as our go codebase started to grow. we needed to pass a lot of mock implementations of services in test.
@@ -80,7 +80,7 @@ So we decided to give Go a try.
 
 #start-stop
 - the next problem we ran into was starting and stopping services in the order of the dependency.
-- we needed to start the lowest component service before we started the upper layers. Doing this manually caused a few crashes. This was pretty uninteresting stuff to write too.
+- we needed to start the lowest component service before we started the upper layers. Doing this manually caused a few crashes. This was pretty uninteresting code to write everytime.
 
 - we built a library to do this. its called start-stop
 
