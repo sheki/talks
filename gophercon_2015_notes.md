@@ -23,6 +23,8 @@ Unicorn had a fixed number of workers on each api server. Under traffic spikes w
 
 Our ruby deploy process was slow - it took around 25 minutes to deploy. This meant changes or urgent fixes could still not be deployed quickly.
 
+We were not in a great situation.
+
 #why rewrite
 So against popular wisdom - We decided to rewrite.
 
@@ -83,6 +85,9 @@ So we decided to give Go a try.
 - also we needed to pass in components in a top down fashion and a missed component would cause a service to fail in production.
 - this was a repeated pattern we saw at parse.
 
+#DI code
+A goode candiadate for inject is a struct which has only one instance through the lifecycle of the program. In this Example we provide the dependencies of a Haandler struct via inject.
+
 #start-stop
 - the next problem we ran into was starting and stopping services in the order of the dependency.
 - we needed to start the lowest component service before we started the upper layers. Doing this manually caused a few crashes. This was pretty uninteresting code to write everytime.
@@ -96,4 +101,8 @@ So we decided to give Go a try.
 - next problem we ran into was tracking errors and the components causing them
 - we started adding stack traces to all our errors. and aggregated them in an in house called log view. This is great for us to track errors.
 
+#stackerr code
+We wrap every call site where we return an error with a stackerror Wrap call. This attaches the stack at the point to the call site.
 #proxy.
+Our primary Database mongo has a hard limit on the number of database connections it can handle - 20000. As we started to add more services and apps we started hitting this limit. So we built a proxy for Mongo purely in Go. Go's IO shone through when we were building this. MongoProxy is called Dvara and is available on our github repo. So building in a proxy in Go not that hard.
+
