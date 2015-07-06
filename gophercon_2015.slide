@@ -1,85 +1,90 @@
-Rewriting Parse.com in Go
+Rewriting the Parse API in Go
 GopherCon 2015, Denver
 8 Jul 2015
 
 Abhishek Kona
-Software Engineer at Parse.com, Facebook.
+Software Engineer at Parse.com, Facebook
 abhishekk@fb.com
 http://sheki.in
 @sheki
 
 * What is this talk about?
-- Why and how did we rewrite api.parse.com from Ruby to Go.
-- Tools and libraries we built.
+- Why and how did we rewrite api.parse.com from Ruby to Go
+- Tools and libraries we built
 
 * What is Parse?
 .image images/parse.jpg
-- Backend-As-A-Service, build an app not backend.
-- Works for IoS, Android, JS, React, Windows, PHP ...
-- Acquired by Facebook in 2013.
+- Backend-As-A-Service, build an app not backend
+- Works for iOS, Android, JS, React, Windows, PHP ..
+- Acquired by Facebook in 2013
 
-* Parse - before Go. 
-- Circa 2013.
-- ~60K apps.
-- 10 Engineers.
-- Ruby on Rails App (like every company out of YCombinator)
+* Parse - circa 2013
+- ~60K apps
+- 10 Engineers
+- Ruby on Rails App
 .image images/rails.png 230 200
 
 
 * Parse - Issues (2013)
-- Single popular app could take down Parse.
-- Fixed unicorn pool.
-- High deploy times.
-- Unmanageable codebase
+- Single popular app could take down Parse
+- Fixed unicorn pool
+- High deploy times
+- Unmanageable codebase # spooky action at a distance
 
-* We decided to Rewrite in Go.
+* We decided to Rewrite in Go
 .image images/rewrite.png 500 400
 
 * Why Rewrite?
-- Estimated performance win - huge.
-- Could not understand the Ruby codebase.
-- Would have liked something static.
+- Estimated reliability win - huge
+# TODO TALK MORE ABOUT ASYNC
+- Wanted something static
+- Hard to evolve to existing Ruby codebase
 
 * Why Go?
-- Statically typed.
-- Good concurrency support.
-- Easier to hire engineers.
+- Statically typed
+- Good concurrency support
+- Shiny - easy to attract engineers
 
-* Rules of the rewrite.
-- Don't break backward compaitibility.
-- No downtime.
+* Rules of the rewrite
+- Don't break backward compatibility
+# TODO speak a little more about backward compatibility
+# THE CLIENT SDKS ARE DEPLOYED AND THEY ARE NOT UPGRADED
+- No downtime
 
-* Progress of the Rewrite
-- We started with a new service - parse-hosting.
-- Next up get rid of PPNS. (Parse push notification service).
-- PPNS went from 250k conns to 1.5m conns per node.
+* Battle-testing 
+- We started with a new service : Hosting
+# CONTROL OVER SSL, 
+- Next up : rewrite Parse push notification service (PPNS)
+- PPNS went from 250k conns to 1.5m conns per node
+# PARSE PUSH talks to mobile clients out there
+# TALK ABOUT GAINING CONFIDENCE
+# ADD SUB BULLETS, 
 
-
-* Rewrite progress contd.
-- Migrate end points one by one.
-- Picked low traffic read only endpoints.
-- Graduate to write endpoints.
-- Shadow live traffic.
+* Rollout
+- Migrate endpoints one by one
+- Picked low-traffic read only endpoints
+- Graduate to write endpoints
+- Shadow live-traffic
 
 * Comment Goldmine
 .code code/ruby_comments.go
 
-* Go a young language.
-- Go was a relatively young language.
-- Few good libraries -> mgo, memcache. 
+* A young language
+- Some good libraries -> mgo, memcache
 - Missing libraries
   
 * Libraries / Tools
 
 * Dependency Injection
-- Replacing implementations in test and production.
-- Easy to miss passing a dependency to a component.
+- Replacing implementations in test and production
+- Easy to miss passing a dependency to a component
 
 * Introducing Inject
 .link http://github.com/facebookgo/inject
-- Dependency injection only at Boot-time.
-- Explicit tags.
-- Fail instead of guessing.
+- Dependency injection only at process start-time
+- Explicit tags
+- Fail instead of guessing
+# DONT MENTION GITHUB PAGE
 
 * Dependency Injection Code
 .code code/inject_example.go
@@ -89,22 +94,22 @@ http://sheki.in
 
 * Start-stop 
 .link http://github.com/facebookgo/startstop
-- Call `Start` / `Stop` automatically.
-- Starts types in a bottom up fashion.
-- Fails on cycles.
+- Call `Start` / `Stop` automatically
+- Starts types in a bottom up fashion
+- Fails on cycles
 
-* Start-stop code.
+* Start-stop code
 .code code/ship_code.go
 
 * Graceful restarts
 .link https://github.com/facebookgo/grace
-- Restart servers gracefully on deploys.
-- Hand off the socket from the old process to the new process.
+- Restart servers gracefully on deploys
+- Hand off the socket from the old process to the new process
 
 * Error Reporting / stackerr
 .link https://github.com/facebookgo/stackerr
-- Wrap every error with stack wrap calls.
-- Aggregate errors based on stack trace in an in house system called log-view.
+- Wrap error calls with stackerr
+- Aggregate errors based on stack trace in an in house system called log-view
 
 * Stackerr code sample
 .code code/stackerr.go
@@ -112,42 +117,52 @@ http://sheki.in
 * Stackerr Output
 .code code/stackerr_out.go
 
-* Mongo-Proxy - Dvara
-- Connections consume precious memory on the DB.
-- Proxies help effectively manage connections across app servers. 
-- Side-effect - you can monitor your database perf from a central place.
-- We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
-
 * Muster
 .link https://github.com/facebookgo/muster
-- A library to perform operations in a batch.
+- A library to perform operations in a batch
 - Two tunables `MaxBatchSize` or `BatchTimeout`
 
-* Results
-- ~500k Go LOC vs ~130k Ruby Codebase
-- ~3 minutes to run all the unit tests (down from 25min)
-- Easier to scale horizontally and quickly add api-servers.
-- Our ops team stopped getting massively burned out from getting paged. 
-- Downsize our API server pool by 90%
-- Rolling restarts dropped from 30 minutes to 3 minutes.
-
-* Parse after Go
-- 500K apps built on Parse.
-- 100% Year-On-Year traffic growth.
-- Primarily a Go Stack.
-.image images/gopherbw.png 230 200
+* Mongo-Proxy - Dvara
+# move to progression part
+- Connections consume precious memory on the DB
+- Proxies help effectively manage connections across app servers
+- Side-effect - you can monitor your database perf from a central place
+- We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
 
 * Moar Libraries
+.link https://github.com/facebookgo 
 - Lots of small libraries
-- Checkout https://github.com/facebookgo 
-- structtag, counter, ensure, stack 
-* We are Very happy with GO.
+- httpcontrol, ensure, stack 
+
+* We are happy with Go
+
+#RESULTS HEADING SLIDE
+
+* Results
+- ~175k Go LOC vs ~130k Ruby Codebase
+- ~3 minutes to run all the unit tests (down from 25min)
+- Fast application start
+# Reliability win over a magnitude
+- Downsize our API server pool by 90%
+- Rolling restarts dropped from 30 minutes to 3 minutes
+
+* Parse - circa 2015
+- 500K apps built on Parse
+- 2-3X YoY traffic growth.
+- Primarily a Go Stack
+.image images/gopherbw.png 230 200
+
+* Observations
+- Rewrites are hard
+- ~4 engineers over 2 years
+- We will do it again
 
 * Recap
 .image images/unicorn_burning.png
 
-* Euology to Unicorns
-"
+* Eulogy to Unicorns
+# FIX FORMATTING
+
   I'd just like to say a few words before we light these unicorns on fire, 
   and send them to hell forever.  
   Thank you for helping us build Parse.  
@@ -158,5 +173,4 @@ http://sheki.in
   -- you did your best for us, and we honor your sacrifice.  
 
   And now your watch has ended. 
-"
-- Charity Majors
+  - Charity Majors

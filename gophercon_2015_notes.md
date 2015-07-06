@@ -28,7 +28,6 @@ We were not in a great situation.
 #why rewrite
 So against popular wisdom - We decided to rewrite.
 
-
 #why rewrite.
 * Estimated performance and reliability wins of using go were huge.
 * It was hard to understand the ruby codebase, we had unfortunately used a lot of gems, it was heard to understand what was going on.
@@ -60,7 +59,7 @@ So we decided to give Go a try.
 
 #rewrite contd.
 * So how did we go about rewriting the API server.
-* Parse has around 100 api end points.
+* Parse has around 50 api end points.
 * We picked low traffic read endpoints and slowly moved on to write end points.
 * Through out the process we ran traffic through a shadow cluster and compared results with our prod ruby cluster.
 * we found out a lot of unexpected behaviour supported by our ruby stack and had to implement it in go.
