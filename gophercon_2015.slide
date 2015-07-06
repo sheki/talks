@@ -112,11 +112,16 @@ http://sheki.in
 * Stackerr Output
 .code code/stackerr_out.go
 
-* Mongo-Proxy
+* Mongo-Proxy - Dvara
 - Connections consume precious memory on the DB.
 - Proxies help effectively manage connections across app servers. 
 - Side-effect - you can monitor your database perf from a central place.
 - We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
+
+* Muster
+.link https://github.com/facebookgo/muster
+- A library to perform operations in a batch.
+- Two tunables `MaxBatchSize` or `BatchTimeout`
 
 * Results
 - ~500k Go LOC vs ~130k Ruby Codebase
@@ -132,6 +137,10 @@ http://sheki.in
 - Primarily a Go Stack.
 .image images/gopherbw.png 230 200
 
+* Moar Libraries
+- Lots of small libraries
+- Checkout https://github.com/facebookgo 
+- structtag, counter, ensure, stack 
 * We are Very happy with GO.
 
 * Recap

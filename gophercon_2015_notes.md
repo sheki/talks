@@ -106,3 +106,6 @@ We wrap every call site where we return an error with a stackerror Wrap call. Th
 #proxy.
 Our primary Database mongo has a hard limit on the number of database connections it can handle - 20000. As we started to add more services and apps we started hitting this limit. So we built a proxy for Mongo purely in Go. Go's IO shone through when we were building this. MongoProxy is called Dvara and is available on our github repo. So building in a proxy in Go not that hard.
 
+# Muster
+
+Another common pattern we saw through our codebase was batching operations together and fire them in a batch later. For example we wanted to batch our metrics send to our metrics collection system and fire one request instead of multiple. We saw the same pattern in our Billing Logger. So we built a library to move the common part of batching operations in a channel and firing them off when a TimeLimit or a BatchLimit is reached. Muster again is open-source and available at our github repo.
