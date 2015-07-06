@@ -14,7 +14,7 @@ We support IoS, Android, PHP and a lot of other platforms.
 Parse was acquired by Facebook in 2013.
 
 # Parse - before Go.
-How did Parse look before adopting Go. In 2013, parse was a Ruby on Rails app, it had 10 engineers working on it. It was quite popular we had around 60 thousand mobile apps. And we were having issues.
+How did Parse look before adopting Go. In 2013, parse was a Ruby on Rails app, it had 10 engineers working on it. It was quite popular we had around 60 thousand mobile apps. But we were starting to have issues.
 
 #parse issues
 Our biggest issue at Parse was one big app could impact our performance. This was because we used Unicorn - a process based ruby HTTP server.
@@ -61,7 +61,7 @@ So we decided to give Go a try.
 * Parse has around 100 api end points.
 * We picked low traffic read endpoints and slowly moved on to write end points.
 * Through out the process we ran traffic through a shadow cluster and compared results with our prod ruby cluster.
-* we found out that a lot of unexpected behaviour supported by our ruby stack and we had to go implement it as our customers relied on it.
+* we found out a lot of unexpected behaviour supported by our ruby stack and had to implement it in go.
 * One example of this is how ruby would represent arrays in HTTP parameters.
 * this process went on and we started making progress.
 
