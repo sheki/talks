@@ -18,15 +18,14 @@ http://sheki.in
 - Works for iOS, Android, JS, React, Windows, PHP ...
 - Acquired by Facebook in 2013
 
-* Parse
-.image images/parse_rome.jpg 500 400
-
+* Rome was not built in a day - they did not use Parse
+.image images/parse_rome.jpg _ 400
 
 * Parse - circa 2013
 - ~60K apps
 - 10 Engineers
 - Ruby on Rails App
-.image images/rails.png 230 200
+.image images/rails.png _ 200
 
 * Parse - Issues (2013)
 - Single popular app could take down Parse
@@ -51,7 +50,6 @@ http://sheki.in
 - Don't break backward compatibility
 - No downtime
 
-
 * Battle-testing 
 - Started with a new service : Hosting
 - Next up : rewrite Parse push notification service (PPNS)
@@ -68,7 +66,6 @@ http://sheki.in
 - Picked low-traffic read only endpoints
 - Graduate to write endpoints
 - Shadow live-traffic
-
 
 * Comment Goldmine
 .code code/ruby_comments.go
@@ -126,14 +123,17 @@ http://sheki.in
 - A library to perform operations in a batch
 - Two tunables `MaxBatchSize` or `BatchTimeout`
 
+* Generics
+.link https://github.com/facebookgo/generics
+
 * Moar Libraries
 .link https://github.com/facebookgo 
 - Lots of small libraries
 - httpcontrol, ensure, stack 
 
-* We love Go.
+* We love Go
 .link github.com/daaku
-.image images/naitik_like.jpg 500 350
+.image images/naitik_like.jpg _ 350
 
 * Results / Observations
 
@@ -146,7 +146,7 @@ http://sheki.in
 
 * Parse - circa 2015
 - 500K apps built on Parse
-- 2-3X YoY traffic growth.
+- 2-3X YoY traffic growth
 - Primarily a Go Stack
 .image images/gopherbw.png 230 200
 
@@ -159,7 +159,6 @@ http://sheki.in
 .image images/unicorn_burning.png
 
 * Eulogy to Unicorns
-# FIX FORMATTING
 
   I'd just like to say a few words before we light these unicorns on fire, 
   and send them to hell forever.  
@@ -167,8 +166,8 @@ http://sheki.in
   Even though you were a miserable sack of shit that paged us in the middle of the night, 
   and were undebuggable, 
   and hid all your most valuable information from us 
-  instead of putting it in a useful log someplace 
-  -- you did your best for us, and we honor your sacrifice.  
+  instead of putting it in a useful log someplace.
+  You did your best for us, and we honor your sacrifice.  
 
   And now your watch has ended. 
-  - Charity Majors
+  -- Charity Majors

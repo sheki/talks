@@ -1,12 +1,3 @@
-package main
-
-import (
-	"fmt"
-	"os"
-
-	"github.com/facebookgo/inject"
-)
-
 func main() {
 
 	var g inject.Graph
