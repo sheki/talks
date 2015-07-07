@@ -15,15 +15,18 @@ http://sheki.in
 * What is Parse?
 .image images/parse.jpg
 - Backend-As-A-Service, build an app not backend
-- Works for iOS, Android, JS, React, Windows, PHP ..
+- Works for iOS, Android, JS, React, Windows, PHP ...
 - Acquired by Facebook in 2013
+
+* Parse
+.image images/parse_rome.jpg 500 400
+
 
 * Parse - circa 2013
 - ~60K apps
 - 10 Engineers
 - Ruby on Rails App
 .image images/rails.png 230 200
-
 
 * Parse - Issues (2013)
 - Single popular app could take down Parse
@@ -36,7 +39,6 @@ http://sheki.in
 
 * Why Rewrite?
 - Estimated reliability win - huge
-# TODO TALK MORE ABOUT ASYNC
 - Wanted something static
 - Hard to evolve to existing Ruby codebase
 
@@ -47,24 +49,26 @@ http://sheki.in
 
 * Rules of the rewrite
 - Don't break backward compatibility
-# TODO speak a little more about backward compatibility
-# THE CLIENT SDKS ARE DEPLOYED AND THEY ARE NOT UPGRADED
 - No downtime
 
+
 * Battle-testing 
-- We started with a new service : Hosting
-# CONTROL OVER SSL, 
+- Started with a new service : Hosting
 - Next up : rewrite Parse push notification service (PPNS)
 - PPNS went from 250k conns to 1.5m conns per node
-# PARSE PUSH talks to mobile clients out there
-# TALK ABOUT GAINING CONFIDENCE
-# ADD SUB BULLETS, 
+
+* Mongo-Proxy - Dvara
+.link https://github.com/facebookgo/dvara
+- Mongo limits max number of connections to 20000
+- We wrote our own proxy for Mongo in Go
+- Go has good network stack
 
 * Rollout
 - Migrate endpoints one by one
 - Picked low-traffic read only endpoints
 - Graduate to write endpoints
 - Shadow live-traffic
+
 
 * Comment Goldmine
 .code code/ruby_comments.go
@@ -76,15 +80,15 @@ http://sheki.in
 * Libraries / Tools
 
 * Dependency Injection
-- Replacing implementations in test and production
-- Easy to miss passing a dependency to a component
+
+- Selecting implementations for test and production
+- Easy to miss passing a dependency to a struct 
 
 * Introducing Inject
 .link http://github.com/facebookgo/inject
 - Dependency injection only at process start-time
 - Explicit tags
 - Fail instead of guessing
-# DONT MENTION GITHUB PAGE
 
 * Dependency Injection Code
 .code code/inject_example.go
@@ -122,27 +126,21 @@ http://sheki.in
 - A library to perform operations in a batch
 - Two tunables `MaxBatchSize` or `BatchTimeout`
 
-* Mongo-Proxy - Dvara
-# move to progression part
-- Connections consume precious memory on the DB
-- Proxies help effectively manage connections across app servers
-- Side-effect - you can monitor your database perf from a central place
-- We wrote our own proxy for Mongo in Go: [[https://github.com/facebookgo/dvara]]
-
 * Moar Libraries
 .link https://github.com/facebookgo 
 - Lots of small libraries
 - httpcontrol, ensure, stack 
 
-* We are happy with Go
+* We love Go.
+.link github.com/daaku
+.image images/naitik_like.jpg 500 350
 
-#RESULTS HEADING SLIDE
+* Results / Observations
 
 * Results
 - ~175k Go LOC vs ~130k Ruby Codebase
 - ~3 minutes to run all the unit tests (down from 25min)
 - Fast application start
-# Reliability win over a magnitude
 - Downsize our API server pool by 90%
 - Rolling restarts dropped from 30 minutes to 3 minutes
 

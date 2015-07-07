@@ -30,6 +30,7 @@ So against popular wisdom - We decided to rewrite.
 
 #why rewrite.
 * Estimated performance and reliability wins of using go were huge.
+* Go has a good async model, and it is not blocking. It would increase our throughput.
 * It was hard to understand the ruby codebase, we had unfortunately used a lot of gems, it was heard to understand what was going on.
 We lost a few engineers who built the initial ruby stack.
 * Reading a dynamic language is hard.
@@ -45,7 +46,8 @@ We lost a few engineers who built the initial ruby stack.
 
 #Rules of the rewrite
 - Being a developer platform we did not want to break any backward compatibility.
-- we wanted to do it live. Mind you doing it live was not easy. We were growing the number of customers at
+- One of the challenges we had at Parse was once a client SDK was deployed in the wild we had no control on its update path. Breaking the API would mean we would break the app. On any given day we service 600 os, sdk version pairs. It is almost impossible for us to break backward compatibility. The web is way easier than Mobile.
+- We wanted to do it live. Mind you doing it live was not easy. We were growing the number of customers at
 a rapid pace. We were increasing the number of backends we were adding to our stack. So we were chasing a moving target.
 - my manager called it changing the engine of a running car.
 
@@ -54,7 +56,9 @@ So how did we go about the rewrite ->
 Actually we started with a new service parse hosting. It was a new product, it needed to do things which ruby was not particularly good with -> quick restarts.
 So we decided to give Go a try.
 * this was a great success we built a reliable service in quick time.
-* we next went after our PPNS service. This is a service which opens a lot of network connections to push providers like Apple and Google. Our event-machine based ruby service was breaking at the seams. We rewrote this in go and very happy with the reliability and uptime.
+* we next went after our PPNS service. This is a service which opens a lot of network connections to mobile devices out in there. Our event-machine based ruby service was breaking at the seams. We rewrote this in go and very happy with the reliability and uptime.
+The number of connections per node went up from 250K in ruby to 1.5m in go.
+All these tests were great for us to gain confidence in go.
 * This convinced us that our biggest beast the API server should be in go and we earnestly started rewriting our stack.
 
 #rewrite contd.
@@ -71,8 +75,9 @@ So we decided to give Go a try.
 
 #go a young language.
 - go was relatively young language
+- it had a few good libraries the mongo driver and the memcache driver particulary.
 - we had to build lots of libraries. it was not the gem world where we almost had a gem for everything.
-- we had to write/maintain our own version of the cassandra library after it stopped being maintained.
+- we had to write/maintain our own version of the cassandra library after it stopped being supported.
 - go did not have a good story around Stopping an HTTP server till 1.3.
 - we had to build all of these.
 - in the next section I will talk about the libraries and tools we had to build in go.
