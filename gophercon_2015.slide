@@ -155,6 +155,11 @@ http://sheki.in
 - ~4 engineers over 2 years
 - We will do it again
 
+* Go Side effects
+- Deploying is easy, build once run everywhere
+- Developers are responsible for deploys not ops. drastic increase in #deploys
+
+
 * Recap
 .image images/unicorn_burning.png
 
