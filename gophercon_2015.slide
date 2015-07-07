@@ -3,74 +3,77 @@ GopherCon 2015, Denver
 8 Jul 2015
 
 Abhishek Kona
-Software Engineer at Parse.com, Facebook
+Software Engineer at Parse and Facebook
 abhishekk@fb.com
 http://sheki.in
 @sheki
 
 * What is this talk about?
-- Why and how did we rewrite api.parse.com from Ruby to Go
+- Why we rewrote the Parse API in Go
 - Tools and libraries we built
 
 * What is Parse?
 .image images/parse.jpg
-- Backend-As-A-Service, build an app not backend
-- Works for iOS, Android, JS, React, Windows, PHP ...
+- Backend as a service
+- SDKs for iOS, Android, JS, React, Windows, PHP
 - Acquired by Facebook in 2013
 
 * Rome was not built in a day - they did not use Parse
 .image images/parse_rome.jpg _ 400
 
-* Parse - circa 2013
+* Parse circa 2013
 - ~60K apps
-- 10 Engineers
-- Ruby on Rails App
+- 10 engineers
+- Ruby on Rails app
 .image images/rails.png _ 200
 
-* Parse - Issues (2013)
+* Scalability Issues in 2013
 - Single popular app could take down Parse
-- Fixed unicorn pool
-- High deploy times
-- Unmanageable codebase # spooky action at a distance
+- Fixed-size unicorn pool
+- Lengthy deploy times
+- Spooky action at a distance
 
-* We decided to Rewrite in Go
+* Solution: Rewrite in Go!
 .image images/rewrite.png 500 400
 
 * Why Rewrite?
-- Estimated reliability win - huge
-- Wanted something static
+- Huge estimated reliability win
+- Wanted easier deploys
+- Needed faster tests
 - Hard to evolve to existing Ruby codebase
 
 * Why Go?
 - Statically typed
 - Good concurrency support
-- Shiny - easy to attract engineers
+- Dynamic number of worker goroutines per HTTP server
+- Easy to attract engineers
 
-* Rules of the rewrite
-- Don't break backward compatibility
+* Rules of the Rewrite
+- Don't break backwards compatibility
 - No downtime
 
-* Battle-testing 
-- Started with a new service : Hosting
-- Next up : rewrite Parse push notification service (PPNS)
-- PPNS went from 250k conns to 1.5m conns per node
+* Initial Ports
+- Hosting server
+- Parse Push Notification Service (PPNS)
+  - Maintains long-lived push sockets with Android clients
+  - Concurrent conns per node increased from 250K to 1.5M
 
-* Mongo-Proxy - Dvara
+* Mongo Proxy
 .link https://github.com/facebookgo/dvara
-- Mongo limits max number of connections to 20000
+- Mongo used to limit max number of connections to 20000
 - We wrote our own proxy for Mongo in Go
-- Go has good network stack
+- Made easy by Go runtime's use of non-blocking I/O
 
 * Rollout
 - Migrate endpoints one by one
-- Picked low-traffic read only endpoints
-- Graduate to write endpoints
-- Shadow live-traffic
+- Diffed responses between old and new code using a shadow cluster
+- Started with low-traffic read only endpoints
+- Graduated to write endpoints
 
 * Comment Goldmine
 .code code/ruby_comments.go
 
-* A young language
+* A Young Language
 - Some good libraries -> mgo, memcache
 - Missing libraries
   
@@ -79,40 +82,41 @@ http://sheki.in
 * Dependency Injection
 
 - Selecting implementations for test and production
-- Easy to miss passing a dependency to a struct 
+- Easy to miss passing a dependency to a struct
 
 * Introducing Inject
 .link http://github.com/facebookgo/inject
-- Dependency injection only at process start-time
-- Explicit tags
+- Only occurs at process startup for singletons
+- Dependencies declared using struct tags
 - Fail instead of guessing
 
-* Dependency Injection Code
+* Dependency Injection Example
 .code code/inject_example.go
 
 * Main for Inject
 .code code/inject_main.go
 
-* Start-stop 
+* Initializing and Destroying Injected Objects
 .link http://github.com/facebookgo/startstop
-- Call `Start` / `Stop` automatically
-- Starts types in a bottom up fashion
+- Traverses object graph
+- At startup: calls `Start` on each injected object in dependency order
+- At shutdown: calls `Stop` on each injected object in reverse dependency order
 - Fails on cycles
 
-* Start-stop code
+* Start-Stop Example
 .code code/ship_code.go
 
-* Graceful restarts
+* Graceful Restarts
 .link https://github.com/facebookgo/grace
 - Restart servers gracefully on deploys
-- Hand off the socket from the old process to the new process
+- On USR2, spawns new process and hands off listening socket
 
-* Error Reporting / stackerr
+* Error Reporting
 .link https://github.com/facebookgo/stackerr
 - Wrap error calls with stackerr
 - Aggregate errors based on stack trace in an in house system called log-view
 
-* Stackerr code sample
+* Stackerr Example
 .code code/stackerr.go
 
 * Stackerr Output
@@ -126,25 +130,25 @@ http://sheki.in
 * Generics
 .link https://github.com/facebookgo/generics
 
-* Moar Libraries
+* More Libraries
 .link https://github.com/facebookgo 
 - Lots of small libraries
 - httpcontrol, ensure, stack 
 
-* We love Go
+* We Love Go
 .link github.com/daaku
 .image images/naitik_like.jpg _ 350
 
 * Results / Observations
 
 * Results
-- ~175k Go LOC vs ~130k Ruby Codebase
+- ~175k LOC in Go vs ~130k LOC in Ruby
 - ~3 minutes to run all the unit tests (down from 25min)
 - Fast application start
-- Downsize our API server pool by 90%
+- Downsized our API server pool by 90%
 - Rolling restarts dropped from 30 minutes to 3 minutes
 
-* Parse - circa 2015
+* Parse circa 2015
 - 500K apps built on Parse
 - 2-3X YoY traffic growth
 - Primarily a Go Stack
@@ -153,12 +157,10 @@ http://sheki.in
 * Observations
 - Rewrites are hard
 - ~4 engineers over 2 years
-- We will do it again
 
-* Go Side effects
-- Deploying is easy, build once run everywhere
-- Developers are responsible for deploys not ops. drastic increase in #deploys
-
+* Go Side Effects
+- Deploying with static binaries is easy
+- Developers are responsible for deploys not ops
 
 * Recap
 .image images/unicorn_burning.png
