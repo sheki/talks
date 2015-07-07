@@ -21,7 +21,7 @@ Our biggest issue at Parse was one big app could impact our performance. This wa
 
 Unicorn had a fixed number of workers on each api server. Under traffic spikes we would quickly run out of workers. It would happen too quickly for Auto Scaling groups to react.
 
-Our ruby deploy process was slow - it took around 25 minutes to deploy. This meant changes or urgent fixes could still not be deployed quickly.
+Our ruby deploy process was slow - it took around 25 minutes to deploy. This meant changes or urgent fixes could still not be rolled out quickly.
 
 We were not in a great situation.
 
@@ -31,9 +31,8 @@ So against popular wisdom - We decided to rewrite.
 #why rewrite.
 * Estimated performance and reliability wins of using go were huge.
 * Go has a good async model, and it is not blocking. It would increase our throughput.
-* It was hard to understand the ruby codebase, we had unfortunately used a lot of gems, it was heard to understand what was going on.
-We lost a few engineers who built the initial ruby stack.
-* Reading a dynamic language is hard.
+* It was hard to understand the ruby codebase, we had unfortunately used a lot of gems, and Reading a dynamic language is hard.
+* We lost a few engineers who built the initial ruby stack.
 * Our stack did not look well suited for a 10x growth.
 * Our bursty nature of traffic was not very well suited for ruby/unicorn.
 
@@ -61,6 +60,9 @@ The number of connections per node went up from 250K in ruby to 1.5m in go.
 All these tests were great for us to gain confidence in go.
 * This convinced us that our biggest beast the API server should be in go and we earnestly started rewriting our stack.
 
+#proxy.
+Our primary Database mongo has a hard limit on the number of database connections it can handle - 20000. As we started to add more services and apps we started hitting this limit. So we built a proxy for Mongo purely in Go. Go's IO shone through when we were building this. MongoProxy is called Dvara and is available on our github repo. So building in a proxy in Go not that hard.
+
 #rewrite contd.
 * So how did we go about rewriting the API server.
 * Parse has around 50 api end points.
@@ -71,7 +73,7 @@ All these tests were great for us to gain confidence in go.
 * this process went on and we started making progress.
 
 # Some Comments in our Ruby Codebase.
-.code code/ruby_comments.go
+As the rewrite progressed we started to find these funny comments in the codebase.
 
 #go a young language.
 - go was relatively young language
@@ -85,7 +87,7 @@ All these tests were great for us to gain confidence in go.
 #dependency injection problems
 - as our go codebase started to grow. we needed to pass a lot of mock implementations of services in test.
 - writing the code to build dependencies in each package was cumbersome.
-- all our mocks in tests were globals and we could not write parallel tests because of that.
+some times our depencencies could be globals and that hindered us from writing parallel tests.
 - also we needed to pass in components in a top down fashion and a missed component would cause a service to fail in production.
 - this was a repeated pattern we saw at parse.
 
@@ -107,9 +109,6 @@ A goode candiadate for inject is a struct which has only one instance through th
 
 #stackerr code
 We wrap every call site where we return an error with a stackerror Wrap call. This attaches the stack at the point to the call site.
-#proxy.
-Our primary Database mongo has a hard limit on the number of database connections it can handle - 20000. As we started to add more services and apps we started hitting this limit. So we built a proxy for Mongo purely in Go. Go's IO shone through when we were building this. MongoProxy is called Dvara and is available on our github repo. So building in a proxy in Go not that hard.
-
 # Muster
 
 Another common pattern we saw through our codebase was batching operations together and fire them in a batch later. For example we wanted to batch our metrics send to our metrics collection system and fire one request instead of multiple. We saw the same pattern in our Billing Logger. So we built a library to move the common part of batching operations in a channel and firing them off when a TimeLimit or a BatchLimit is reached. Muster again is open-source and available at our github repo.
