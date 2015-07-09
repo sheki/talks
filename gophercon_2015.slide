@@ -55,8 +55,8 @@ http://sheki.in
 * Initial Ports
 - Hosting server
 - Parse Push Notification Service (PPNS)
-  - Maintains long-lived push sockets with Android clients
-  - Concurrent conns per node increased from 250K to 1.5M
+- Maintains long-lived push sockets with Android clients
+- Concurrent conns per node increased from 250K to 1.5M
 
 * Mongo Proxy
 .link https://github.com/facebookgo/dvara
@@ -74,14 +74,14 @@ http://sheki.in
 .code code/ruby_comments.go
 
 * A Young Language
-- Some good libraries -> mgo, memcache
-- Missing libraries
+- Some good libraries: mgo, memcache, etc.
+- Some missing libraries
   
 * Libraries / Tools
 
 * Dependency Injection
 
-- Selecting implementations for test and production
+- Helps instantiate implementations for test and production
 - Easy to miss passing a dependency to a struct
 
 * Introducing Inject
@@ -114,7 +114,7 @@ http://sheki.in
 * Error Reporting
 .link https://github.com/facebookgo/stackerr
 - Wrap error calls with stackerr
-- Aggregate errors based on stack trace in an in house system called log-view
+- Aggregate errors based on stack trace in an in-house system called Logview
 
 * Stackerr Example
 .code code/stackerr.go
@@ -125,33 +125,33 @@ http://sheki.in
 * Muster
 .link https://github.com/facebookgo/muster
 - A library to perform operations in a batch
-- Two tunables `MaxBatchSize` or `BatchTimeout`
+- Two tunables: `MaxBatchSize` and `BatchTimeout`
 
 * Generics
 .link https://github.com/facebookgo/generics
 
 * More Libraries
 .link https://github.com/facebookgo 
-- Lots of small libraries
+- Many more small libraries
 - httpcontrol, ensure, stack 
 
 * We Love Go
 .link github.com/daaku
 .image images/naitik_like.jpg _ 350
 
-* Results / Observations
+* Results
 
 * Results
 - ~175k LOC in Go vs ~130k LOC in Ruby
 - ~3 minutes to run all the unit tests (down from 25min)
-- Fast application start
-- Downsized our API server pool by 90%
+- Apps start in seconds instead of minutes
+- Downsized API server pool by 90%
 - Rolling restarts dropped from 30 minutes to 3 minutes
 
 * Parse circa 2015
-- 500K apps built on Parse
-- 2-3X YoY traffic growth
-- Primarily a Go Stack
+- >500K apps built on Parse
+- 2-3x YoY traffic growth
+- Primarily a Go stack
 .image images/gopherbw.png 230 200
 
 * Observations
@@ -160,7 +160,7 @@ http://sheki.in
 
 * Go Side Effects
 - Deploying with static binaries is easy
-- Developers are responsible for deploys not ops
+- Developers are responsible for deploys, not ops
 
 * Recap
 .image images/unicorn_burning.png
